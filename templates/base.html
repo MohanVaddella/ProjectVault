@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Project Vault{% endblock %}</title>
+    
+    
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    {% block extra_head %}{% endblock %}
+    
+</head>
+<body>
+
+    
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Project Vault</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
+                </li>
+    
+                
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('vault.list_kyc_documents') }}" id="vault-link">Vault</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('dashboard') }}" id="dashboard-link">Dashboard</a>
+            </li>
+
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+                </li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} mt-4" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+    
+    <div class="container mt-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    
+    <footer class="footer bg-light text-center py-3">
+        <div class="container">
+            <span class="text-muted">&copy; 2024 Project Vault. All Rights Reserved.</span>
+        </div>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        
+        const isAuthenticated = {{ current_user.is_authenticated | default(False) | tojson | safe }};
+
+        
+        
+        document.getElementById('vault-link').addEventListener('click', function (event) {
+            if (!isAuthenticated) {
+                event.preventDefault();
+                alert('Please login to access Vault');
+                window.location.href = "{{ url_for('auth.login') }}";
+            }
+        });
+    
+        
+        document.getElementById('dashboard-link').addEventListener('click', function (event) {
+            if (!isAuthenticated) {
+                event.preventDefault();
+                alert('Please login to access Dashboard');
+                window.location.href = "{{ url_for('auth.login') }}";
+            }
+        });
+    </script>
+    
+    
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}My Vault{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="text-center">My Vault</h3>
+            <p class="text-center">Manage your KYC documents securely.</p>
+            <hr>
+        </div>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Upload KYC Document</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('vault.upload') }}" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        
+                        <div class="form-group">
+                            <label for="document_type">Select Document Type</label>
+                            {{ form.document_type(class_='form-control', id='document_type') }}
+                            {% if form.document_type.errors %}
+                                <small class="text-danger">{{ form.document_type.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <label for="document">Upload Document</label>
+                            {{ form.document(class_='form-control-file', id='document') }}
+                            {% if form.document.errors %}
+                                <small class="text-danger">{{ form.document.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+
+                        
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Upload Document</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h4 class="text-center">Your KYC Documents</h4>
+            <table class="table table-bordered mt-3">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Document Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for document in documents %}
+                    <tr>
+                        <td>{{ document.type }}</td>
+                        <td>{{ document.status }}</td>
+                        <td>
+                            <a href="{{ url_for('vault.view', doc_id=document.id) }}" class="btn btn-info btn-sm">View</a>
+                            <a href="{{ url_for('vault.update', doc_id=document.id) }}" class="btn btn-warning btn-sm">Update</a>
+                            <form method="POST" action="{{ url_for('vault.delete', doc_id=document.id) }}" class="d-inline">
+                                {{ form.hidden_tag() }}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">No documents found. Please upload your KYC documents.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

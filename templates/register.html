@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Project Vault{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Create an Account</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('auth.register') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            {{ form.email(class_='form-control', id='email', placeholder='Enter your email') }}
+                            {% if form.email.errors %}
+                                <small class="text-danger">{{ form.email.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            {{ form.phone(class_='form-control', id='phone', placeholder='Enter your phone number') }}
+                            {% if form.phone.errors %}
+                                <small class="text-danger">{{ form.phone.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            {{ form.password(class_='form-control', id='password', placeholder='Enter a password') }}
+                            {% if form.password.errors %}
+                                <small class="text-danger">{{ form.password.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm Password</label>
+                            {{ form.confirm_password(class_='form-control', id='confirm_password', placeholder='Confirm your password') }}
+                            {% if form.confirm_password.errors %}
+                                <small class="text-danger">{{ form.confirm_password.errors[0] }}</small>
+                            {% endif %}
+                        </div>
+
+                        
+
+                        
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
