@@ -26,19 +26,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 
+                
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                    <a class="nav-link" href="{{ url_for('vault.request_kyc_access') }}" id="bank-interface-link">Bank Interface</a>  
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
-                </li>
-    
                 
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('vault.list_kyc_documents') }}" id="vault-link">Vault</a>
+                <a class="nav-link" href="{{ url_for('vault.upload_kyc_document') }}" id="vault-link">Vault</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('dashboard') }}" id="dashboard-link">Dashboard</a>
+                <a class="nav-link" href="{{ url_for('vault.view_dashboard') }}" id="dashboard-link">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.register') }}">Register</a>
             </li>
 
             {% if current_user.is_authenticated %}
@@ -77,29 +80,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        
-        const isAuthenticated = {{ current_user.is_authenticated | default(False) | tojson | safe }};
-
-        
-        
-        document.getElementById('vault-link').addEventListener('click', function (event) {
-            if (!isAuthenticated) {
-                event.preventDefault();
-                alert('Please login to access Vault');
-                window.location.href = "{{ url_for('auth.login') }}";
-            }
-        });
-    
-        
-        document.getElementById('dashboard-link').addEventListener('click', function (event) {
-            if (!isAuthenticated) {
-                event.preventDefault();
-                alert('Please login to access Dashboard');
-                window.location.href = "{{ url_for('auth.login') }}";
-            }
-        });
-    </script>
     
     
     

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, session
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, session, make_response
 from models import User
 from extensions import db, bcrypt, mail
 from forms import RegistrationForm, LoginForm
@@ -19,7 +19,7 @@ def register():
         
         return render_template('register.html', form=form)
     if request.method == 'POST' and form.validate_on_submit():
-        
+        name = form.name.data
         email = form.email.data
         phone = form.phone.data
         password = form.password.data
@@ -35,7 +35,7 @@ def register():
             return jsonify({"message": "User already exists"}), 400
 
         password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-        new_user = User(email=email, phone=phone, password_hash=password_hash)
+        new_user = User(name=name, email=email, phone=phone, password_hash=password_hash)
 
         db.session.add(new_user)
         db.session.commit()
@@ -60,8 +60,6 @@ def login():
         if user is None:
             flash("User does not exist", "danger")
             return redirect(url_for('auth.login'))
-        if bcrypt.check_password_hash(user.password_hash, password):
-            print("Password matches!")
         
 
         
@@ -91,12 +89,22 @@ def verify_otp():
     user_id = session.get('user_id')
 
     if expected_otp and otp_entered == expected_otp:
-        
+        user = User.query.get(user_id)
+        if user is None:
+            flash("User not found", "danger")
+            return redirect(url_for('auth.login'))
         token = create_access_token(identity=user_id, expires_delta=timedelta(hours=1))
+        
+
+        
         print(f"Token generated: {token}")
         
-        response = redirect(url_for('dashboard'))
-        set_access_cookies(response, token)  
+        
+        
+        response = make_response(redirect(url_for('vault.view_dashboard')))
+        set_access_cookies(response, token)
+        
+        
         return response 
 
     else:

@@ -5,6 +5,7 @@ from flask_wtf.file import FileAllowed
 
 
 class RegistrationForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=100)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = StringField('Phone', validators=[DataRequired(),
     Regexp(r'^\d+$', message="Phone number must contain only digits"),
@@ -21,18 +22,9 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
-
-class DocumentForm(FlaskForm):
-    document_type = SelectField('Document Type', choices=[
-        ('PAN', 'PAN Card'),
-        ('AADHAAR', 'Aadhaar Card'),
-        ('PASSPORT', 'Passport'),
-        ('PHOTO', 'Photo')
-    ], validators=[DataRequired()])
     
-    document = FileField('Upload Document', validators=[
-        FileAllowed(['pdf', 'jpg', 'jpeg', 'png'], 'PDF or Image files only!'),
-        DataRequired()
-    ])
+class KYCForm(FlaskForm):
+    document_type = SelectField('Document Type', choices=[('passport', 'Passport'), ('license', 'Driving License'), ('id', 'National ID')], validators=[DataRequired()])
+    document = FileField('Upload Document', validators=[DataRequired(), FileAllowed(['pdf', 'png', 'jpg', 'jpeg'], 'PDF or Image files only!')])
     
-    submit = SubmitField('Upload')
+    submit = SubmitField('Upload Document')

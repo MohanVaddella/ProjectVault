@@ -25,10 +25,10 @@
         </div>
         <div class="col-md-4">
             <div class="card text-white bg-success mb-3">
-                <div class="card-header">Verified Documents</div>
+                <div class="card-header">Used for Consent</div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ verified_documents | default(0) }}</h5>
-                    <p class="card-text">Documents that have been successfully verified.</p>
+                    <h5 class="card-title">{{ approved_documents | length | default(0) }}</h5>
+                    <p class="card-text">Documents for which consent has been given.</p>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="card text-white bg-danger mb-3">
                 <div class="card-header">Pending Requests</div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ pending_requests | default(0) }}</h5>
+                    <h5 class="card-title">{{ pending_requests | length | default(0) }}</h5>
                     <p class="card-text">Access requests pending your approval.</p>
                 </div>
             </div>
@@ -46,42 +46,11 @@
     
     <div class="row mt-5">
         <div class="col-md-12">
-            <h4>Recent Activity</h4>
-            <table class="table table-striped mt-3">
-                <thead>
-                    <tr>
-                        <th>Action</th>
-                        <th>Document Type</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for activity in recent_activity %}
-                    <tr>
-                        <td>{{ activity.action }}</td>
-                        <td>{{ activity.document_type }}</td>
-                        <td>{{ activity.status }}</td>
-                        <td>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" class="text-center">No recent activity found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    
-    <div class="row mt-5">
-        <div class="col-md-12">
-            <h4>Pending Requests</h4>
+            <h4 class="text-center">Pending Consent Requests</h4>
             <table class="table table-bordered mt-3">
                 <thead class="thead-light">
                     <tr>
-                        <th>Requesting Party</th>
+                        <th>Requesting Bank</th>
                         <th>Document Type</th>
                         <th>Request Date</th>
                         <th>Actions</th>
@@ -90,12 +59,16 @@
                 <tbody>
                     {% for request in pending_requests %}
                     <tr>
-                        <td>{{ request.party }}</td>
+                        <td>{{ request.bank_name }}</td>
                         <td>{{ request.document_type }}</td>
-                        <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            <a href="{{ url_for('dashboard.approve_request', request_id=request.id) }}" class="btn btn-success btn-sm" title="Approve this request">Approve</a>
-                            <a href="{{ url_for('dashboard.deny_request', request_id=request.id) }}" class="btn btn-danger btn-sm" title="Deny this request">Deny</a>
+                            <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST">
+                                <button class="btn btn-success" type="submit">Approve</button>
+                            </form>
+                            <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST">
+                                <button class="btn btn-danger" type="submit">Deny</button>
+                            </form>
                         </td>
                     </tr>
                     {% else %}

@@ -1,10 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash, g
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, verify_jwt_in_request
-from flask_jwt_extended.exceptions import JWTExtendedException
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from flask_jwt_extended.exceptions import NoAuthorizationError, JWTDecodeError, JWTExtendedException
 from werkzeug.security import check_password_hash
 
 from extensions import db, bcrypt, jwt, mail
-
+from datetime import timedelta
 import pyotp
 from dotenv import load_dotenv
 import os
@@ -36,6 +37,8 @@ app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', os.getenv('
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_COOKIE_SECURE'] = False  
 app.config['JWT_ACCESS_COOKIE_PATH'] = '/'
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 
 mail.init_app(app)
 db.init_app(app)
@@ -51,7 +54,7 @@ app.register_blueprint(vault_bp, url_prefix='/vault')
 def load_current_user():
     
     public_routes = ['home', 'auth.register', 'auth.login']
-    
+    print(f"Checking JWT for request: {request.cookies}")
     if request.endpoint in public_routes or request.path.startswith('/static'):
         g.current_user = None
     else:
@@ -60,10 +63,22 @@ def load_current_user():
             verify_jwt_in_request()
             token = get_jwt_identity()
             if token:
-                g.current_user = User.query.get(token)  
+                g.current_user = User.query.get(token) 
+                print(f"User loaded: {g.current_user}") 
             else:
                 g.current_user = None
-        except JWTExtendedException:
+        except ExpiredSignatureError:
+            flash("Session expired. Please login again.", "warning")
+            g.current_user = None
+            return redirect(url_for('auth.login'))
+        except InvalidTokenError:
+            flash("Invalid token. Please login again.", "danger")
+            g.current_user = None
+            return redirect(url_for('auth.login'))
+        except NoAuthorizationError:
+            g.current_user = None
+        except JWTDecodeError as e:
+            print(f"JWT Decode Error: {e}")
             g.current_user = None
 
 

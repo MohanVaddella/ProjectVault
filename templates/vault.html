@@ -13,6 +13,17 @@
     </div>
 
     
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alert alert-dismissible fade show" role="alert">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="card">
@@ -20,10 +31,9 @@
                     <h4>Upload KYC Document</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ url_for('vault.upload') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ url_for('vault.upload_kyc_document') }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
 
-                        
                         <div class="form-group">
                             <label for="document_type">Select Document Type</label>
                             {{ form.document_type(class_='form-control', id='document_type') }}
@@ -32,7 +42,6 @@
                             {% endif %}
                         </div>
 
-                        
                         <div class="form-group">
                             <label for="document">Upload Document</label>
                             {{ form.document(class_='form-control-file', id='document') }}
@@ -41,7 +50,6 @@
                             {% endif %}
                         </div>
 
-                        
                         <div class="form-group text-center">
                             <button type="submit" class="btn btn-primary">Upload Document</button>
                         </div>
@@ -66,12 +74,11 @@
                 <tbody>
                     {% for document in documents %}
                     <tr>
-                        <td>{{ document.type }}</td>
+                        <td>{{ document.document_type }}</td>
                         <td>{{ document.status }}</td>
                         <td>
-                            <a href="{{ url_for('vault.view', doc_id=document.id) }}" class="btn btn-info btn-sm">View</a>
-                            <a href="{{ url_for('vault.update', doc_id=document.id) }}" class="btn btn-warning btn-sm">Update</a>
-                            <form method="POST" action="{{ url_for('vault.delete', doc_id=document.id) }}" class="d-inline">
+                            <a href="{{ url_for('vault.update_kyc_document', doc_id=document.id) }}" class="btn btn-warning btn-sm">Update</a>
+                            <form method="POST" action="{{ url_for('vault.delete_kyc_document', doc_id=document.id) }}" class="d-inline">
                                 {{ form.hidden_tag() }}
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
