@@ -5,15 +5,14 @@
 {% block content %}
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 dashboard">
             <h3 class="text-center">Dashboard</h3>
             <p class="text-center">Overview of your KYC documents and access requests.</p>
-            <hr>
         </div>
     </div>
 
     
-    <div class="row mt-4">
+    <div class="row mt-4 dashboard">
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">Total Documents</div>
@@ -45,7 +44,7 @@
 
     
     <div class="row mt-5">
-        <div class="col-md-12">
+        <div class="col-md-12 dashboard">
             <h4 class="text-center">Pending Consent Requests</h4>
             <table class="table table-bordered mt-3">
                 <thead class="thead-light">
@@ -63,12 +62,14 @@
                         <td>{{ request.document_type }}</td>
                         <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
                         <td>
+                            <div class="button-group">
                             <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST">
-                                <button class="btn btn-success" type="submit">Approve</button>
+                                <button class="btn btn-success btn-sm" type="submit">Approve</button>
                             </form>
                             <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST">
-                                <button class="btn btn-danger" type="submit">Deny</button>
+                                <button class="btn btn-danger btn-sm" type="submit">Deny</button>
                             </form>
+                        </div>
                         </td>
                     </tr>
                     {% else %}

@@ -4,24 +4,11 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <h3 class="text-center">Request KYC Documents</h3>
-            <p class="text-center">Select a user and document type to send a consent request.</p>
-            <hr>
-        </div>
-    </div>
+    <span class="request-kyc-section">
+        <h3 class="text-center">Request KYC Documents</h3>
+        <p class="text-center">Select a user and document type to send a consent request.</p>
+    </span>
 
-    
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="alert alert-dismissible fade show" role="alert">
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
 
     <div class="row">
         <div class="col-md-6 offset-md-3">
