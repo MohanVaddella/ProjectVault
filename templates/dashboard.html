@@ -15,7 +15,9 @@
     <div class="row mt-4 dashboard">
         <div class="col-md-4">
             <div class="card text-white bg-primary mb-3">
-                <div class="card-header">Total Documents</div>
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-file-alt fa-lg mr-2"></i> Total Documents
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ total_documents | default(0) }}</h5>
                     <p class="card-text">Documents currently stored in your vault.</p>
@@ -24,7 +26,9 @@
         </div>
         <div class="col-md-4">
             <div class="card text-white bg-success mb-3">
-                <div class="card-header">Used for Consent</div>
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-check-circle fa-lg mr-2"></i> Used for Consent
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ approved_documents | length | default(0) }}</h5>
                     <p class="card-text">Documents for which consent has been given.</p>
@@ -33,7 +37,9 @@
         </div>
         <div class="col-md-4">
             <div class="card text-white bg-danger mb-3">
-                <div class="card-header">Pending Requests</div>
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-exclamation-circle fa-lg mr-2"></i> Pending Requests
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ pending_requests | length | default(0) }}</h5>
                     <p class="card-text">Access requests pending your approval.</p>
@@ -59,15 +65,23 @@
                     {% for request in pending_requests %}
                     <tr>
                         <td>{{ request.bank_name }}</td>
-                        <td>{{ request.document_type }}</td>
+                        <td>{{ request.document_type }}
+                        {% if request.status == 'approved' %}
+                                <i class="fas fa-check-circle text-success ml-1"></i>
+                            {% endif %}
+                        </td>
                         <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            <div class="button-group">
-                            <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST">
-                                <button class="btn btn-success btn-sm" type="submit">Approve</button>
+                            <div class="button-group d-flex justify-content-around">
+                            <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST" style="display: inline;">
+                                <button class="btn btn-success btn-sm" type="submit">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
                             </form>
-                            <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST">
-                                <button class="btn btn-danger btn-sm" type="submit">Deny</button>
+                            <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST" style="display: inline;">
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    <i class="fas fa-times"></i> Deny
+                                </button>
                             </form>
                         </div>
                         </td>
