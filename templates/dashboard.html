@@ -14,34 +14,43 @@
     
     <div class="row mt-4 dashboard">
         <div class="col-md-4">
-            <div class="card text-white bg-primary mb-3">
+            <div class="card ca-db dashboard-card mb-3 total-documents-card">
                 <div class="card-header d-flex align-items-center">
                     <i class="fas fa-file-alt fa-lg mr-2"></i> Total Documents
                 </div>
-                <div class="card-body">
+                <div class="title-with-image">
+                    <img src="{{ url_for('static', filename='images/total.png') }}" alt="Total Documents" class="dashboard-card-image">
                     <h5 class="card-title">{{ total_documents | default(0) }}</h5>
+                </div>
+                <div class="card-body">
                     <p class="card-text">Documents currently stored in your vault.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-success mb-3">
+            <div class="card ca-db dashboard-card mb-3 consent-documents-card">
                 <div class="card-header d-flex align-items-center">
                     <i class="fas fa-check-circle fa-lg mr-2"></i> Used for Consent
                 </div>
-                <div class="card-body">
+                <div class="title-with-image">
+                    <img src="{{ url_for('static', filename='images/approved.png') }}" alt="Used for Consent" class="dashboard-card-image">
                     <h5 class="card-title">{{ approved_documents | length | default(0) }}</h5>
+                </div>
+                <div class="card-body">
                     <p class="card-text">Documents for which consent has been given.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-white bg-danger mb-3">
+            <div class="card dashboard-card ca-db mb-3 pending-requests-card">
                 <div class="card-header d-flex align-items-center">
                     <i class="fas fa-exclamation-circle fa-lg mr-2"></i> Pending Requests
                 </div>
-                <div class="card-body">
+                <div class="title-with-image">
+                    <img src="{{ url_for('static', filename='images/pending.png') }}" alt="Pending Requests" class="dashboard-card-image">
                     <h5 class="card-title">{{ pending_requests | length | default(0) }}</h5>
+                </div>
+                <div class="card-body">
                     <p class="card-text">Access requests pending your approval.</p>
                 </div>
             </div>

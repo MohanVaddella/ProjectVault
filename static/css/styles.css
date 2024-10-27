@@ -183,6 +183,46 @@ table th {
     font-size: 1rem; 
 }
 
+.ca-db {
+    background-color: #f7f3a3 !important;
+}
+
+.ca-db .title-with-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0; 
+}
+
+.ca-db .dashboard-card-image {
+    width: 70px; 
+    height: 70px; 
+    margin-left: 60px; 
+}
+
+.ca-db .card-header {
+    color: #384981;
+}
+
+.ca-db .card-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;       
+    height: 60px;      
+    border-radius: 50%; 
+    color: #fff;
+    background-color: #384981;
+    margin: 0 auto 10px; 
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.ca-db .card-text {
+    color: #384981;
+    font-weight:400;
+}
+
 .button-group {
     display: flex; 
     gap: 10px; 
