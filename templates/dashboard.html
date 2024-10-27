@@ -52,48 +52,51 @@
     <div class="row mt-5">
         <div class="col-md-12 dashboard">
             <h4 class="text-center">Pending Consent Requests</h4>
-            <table class="table table-bordered mt-3">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Requesting Bank</th>
-                        <th>Document Type</th>
-                        <th>Request Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in pending_requests %}
-                    <tr>
-                        <td>{{ request.bank_name }}</td>
-                        <td>{{ request.document_type }}
-                        {% if request.status == 'approved' %}
-                                <i class="fas fa-check-circle text-success ml-1"></i>
-                            {% endif %}
-                        </td>
-                        <td>{{ request.created_at.strftime('%Y-%m-%d') }}</td>
-                        <td>
-                            <div class="button-group d-flex justify-content-around">
-                            <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST" style="display: inline;">
-                                <button class="btn btn-success btn-sm" type="submit">
-                                    <i class="fas fa-check"></i> Approve
-                                </button>
-                            </form>
-                            <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST" style="display: inline;">
-                                <button class="btn btn-danger btn-sm" type="submit">
-                                    <i class="fas fa-times"></i> Deny
-                                </button>
-                            </form>
+            <div class="row mt-3">
+                {% for request in pending_requests %}
+                <div class="col-md-4 mb-4">
+                    <div class="card pending-request-card custom-card-width">
+                        {% if request.document_type == 'passport' %}
+                            <img src="{{ url_for('static', filename='images/passport.png') }}" class="card-img-top" alt="Passport Image">
+                        {% elif request.document_type == 'license' %}
+                            <img src="{{ url_for('static', filename='images/driving-license.png') }}" class="card-img-top" alt="Driving License Image">
+                        {% elif request.document_type == 'id' %}
+                            <img src="{{ url_for('static', filename='images/national-id.png') }}" class="card-img-top" alt="National ID Image">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/default.png') }}" class="card-img-top" alt="Default Image">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ request.document_type | capitalize }}</h5>
+                            <h5 class="card-title d-flex align-items-center text-center">
+                                <img src="{{ url_for('static', filename='images/bank.png') }}" alt="Bank Logo" class="bank-logo">
+                                {{ request.bank_name }}
+                            </h5>
+                            <p class="card-text d-flex align-items-center text-center">
+                                <img src="{{ url_for('static', filename='images/calendar.png') }}" alt="Calendar Icon" class="calendar-icon">
+                                {{ request.created_at.strftime('%Y-%m-%d') }}
+                            </p>
+                            <div class="button-group-vertical mt-3">
+                                <form action="{{ url_for('vault.approve_kyc_request', request_id=request.id) }}" method="POST" style="display: block;">
+                                    <button class="btn btn-success btn-block" type="submit">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                </form>
+                                <form action="{{ url_for('vault.deny_kyc_request', request_id=request.id) }}" method="POST" style="display: block;">
+                                    <button class="btn btn-danger btn-block mt-2" type="submit">
+                                        <i class="fas fa-times"></i> Deny
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4" class="text-center">No pending requests found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center">
+                    <p>No pending requests found.</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    </div>       
 </div>
 {% endblock %}
