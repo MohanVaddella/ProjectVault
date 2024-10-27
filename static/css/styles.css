@@ -1,4 +1,4 @@
-body {
+html, body {
     font-family: Arial, sans-serif;
     background-color: #0390c8;
     margin: 0;
@@ -229,6 +229,8 @@ table th {
     padding: 5px 0;
     position: relative; 
     text-align: center;
+    flex-shrink: 0;
+    width: 100%;
 }
 
 .footer span {
@@ -264,6 +266,84 @@ table th {
 .btn-success:hover {
     background-color: #218838;
     border-color: #1e7e34;
+}
+
+
+.your-doc {
+    margin-top: 20px;
+}
+
+.your-doc h4 {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.your-doc .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.your-doc .card:hover {
+    transform: translateY(-5px);
+    color: #fff;
+}
+
+.your-doc .card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    max-height: 120px;
+    object-fit: contain;
+}
+
+.your-doc .card-title {
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.your-doc .card-body {
+    padding: 5px;
+}
+
+.your-doc .card-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #666;
+}
+
+.your-doc .btn {
+    width: 70%;
+    border-radius: 20px;
+    padding: 8px 0;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.your-doc .btn-warning {
+    background-color: #ffcc00;
+    color: #333;
+    border-color: #ffcc00;
+}
+
+.your-doc .btn-warning:hover {
+    background-color: #e6b800;
+    border-color: #e6b800;
+}
+
+.your-doc .btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
+}
+
+.your-doc .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
 }
 
 

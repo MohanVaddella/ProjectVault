@@ -52,34 +52,44 @@
     <div class="row mt-5">
         <div class="col-md-12 your-doc">
             <h4 class="text-center">Your KYC Documents</h4>
-            <table class="table table-bordered mt-3">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Document Type</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for document in documents %}
-                    <tr>
-                        <td>{{ document.document_type }}</td>
-                        <td>{{ document.status }}</td>
-                        <td>
-                            <a href="{{ url_for('vault.update_kyc_document', doc_id=document.id) }}" class="btn btn-warning btn-sm">Update</a>
-                            <form method="POST" action="{{ url_for('vault.delete_kyc_document', doc_id=document.id) }}" class="d-inline">
-                                {{ form.hidden_tag() }}
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" class="text-center">No documents found. Please upload your KYC documents.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="row">
+                {% for document in documents %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        
+                        <img src="{% if document.document_type == 'passport' %}
+                                    {{ url_for('static', filename='images/passport.png') }}
+                                 {% elif document.document_type == 'license' %}
+                                    {{ url_for('static', filename='images/driving-license.png') }}
+                                 {% elif document.document_type == 'id' %}
+                                    {{ url_for('static', filename='images/national-id.png') }}
+                                 {% else %}
+                                    {{ url_for('static', filename='images/default.png') }}
+                                 {% endif %}"
+                             class="card-img-top" alt="{{ document.document_type }}">
+    
+                        <div class="card-body text-center">
+                            
+                            <h5 class="card-title">{{ document.document_type | capitalize }}</h5>
+                            <p class="card-text font-weight-bold">{{ document.status | capitalize }}</p>
+    
+                            
+                            <div class="d-grid">
+                                <a href="{{ url_for('vault.update_kyc_document', doc_id=document.id) }}" class="btn btn-warning mb-2">Update</a>
+                                <form method="POST" action="{{ url_for('vault.delete_kyc_document', doc_id=document.id) }}">
+                                    {{ form.hidden_tag() }}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center">
+                    <p>No documents found. Please upload your KYC documents.</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
