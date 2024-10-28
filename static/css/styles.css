@@ -183,8 +183,16 @@ table th {
     font-size: 1rem; 
 }
 
-.ca-db {
-    background-color: #f7f3a3 !important;
+.total-documents-card {
+    background-color: #d1c3f7;
+}
+
+.pending-requests-card {
+    background-color: #f3f0b7 !important;
+}
+
+.consent-documents-card {
+    background-color: #99f4d7;
 }
 
 .ca-db .title-with-image {
