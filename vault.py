@@ -2,9 +2,10 @@ import os
 import hashlib
 from flask import Blueprint, request, jsonify, current_app, send_from_directory, render_template, redirect, url_for, flash
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
+from flask_mail import Message
 from werkzeug.utils import secure_filename
 from models import User, KYC, KYCRequest, AccessToken
-from extensions import db
+from extensions import db, mail
 from utils import encrypt_file, decrypt_file, allowed_file, generate_access_token
 from forms import KYCForm
 from datetime import datetime, timedelta
@@ -178,9 +179,35 @@ def request_kyc_access():
             kyc_doc.status = 'pending'
             
         db.session.commit()
+        
+        user = User.query.get(user_id)  
 
-        flash("KYC access request created successfully.", "success")
-        return redirect(url_for('vault.view_vault'))
+    if user:
+        
+        login_link = url_for('auth.login', _external=True)
+        
+        
+        msg = Message(
+            subject="KYC Verification Request",
+            recipients=[user.email],
+            html=render_template(
+                'kyc_request_email.html',
+                user_name=user.name,
+                bank_name=bank_name,
+                document_type=document_type,
+                login_link=login_link
+            )
+        )
+        
+        
+        try:
+            mail.send(msg)
+            flash('KYC request created and email notification sent to the user.', 'success')
+        except Exception as e:
+            flash('Failed to send email notification.', 'danger')
+            print(f"Error sending email: {e}")
+
+        return redirect(url_for('vault.request_kyc_access'))
 
 
 @vault_bp.route('/approve_kyc_request/<int:request_id>', methods=['POST'])

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify, flash, g
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, verify_jwt_in_request
+from flask_mail import Mail
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 from flask_jwt_extended.exceptions import NoAuthorizationError, JWTDecodeError, JWTExtendedException
 from werkzeug.security import check_password_hash
