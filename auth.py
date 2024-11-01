@@ -93,7 +93,7 @@ def verify_otp():
         if user is None:
             flash("User not found", "danger")
             return redirect(url_for('auth.login'))
-        token = create_access_token(identity=user_id, expires_delta=timedelta(hours=1))
+        token = create_access_token(identity=user_id, expires_delta=timedelta(hours=24))
         
 
         
